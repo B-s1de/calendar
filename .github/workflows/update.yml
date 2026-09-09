@@ -15,6 +15,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -30,6 +31,28 @@ jobs:
       - name: Build iCalendar
         run: python spbu_calendar/build_calendar.py
 
+      - name: Check generated calendar
+        run: |
+          ls -lah site
+          echo "Events:"
+          grep -c "BEGIN:VEVENT" site/spbu.ics || true
+
+      - name: Create index
+        run: |
+          cat > site/index.html <<'EOF'
+          <!doctype html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>СПбГУ — расписание</title>
+          </head>
+          <body>
+            <h1>СПбГУ — 26.М05-пс</h1>
+            <p><a href="spbu.ics">Подписка на календарь (.ics)</a></p>
+          </body>
+          </html>
+          EOF
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
@@ -41,9 +64,11 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
