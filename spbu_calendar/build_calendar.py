@@ -6,7 +6,7 @@ from datetime import datetime, date, timedelta
 from icalendar import Calendar, Event
 from zoneinfo import ZoneInfo
 
-SEMESTER_URL = "https://timetable.spbu.ru/PSYC/StudentGroupEvents/Semester/459496"
+SEMESTER_URL = "https://timetable.spbu.ru/PSYC/StudentGroupEvents/Semester/459496?lang=ru"
 OUT = "site/spbu.ics"
 TZ = ZoneInfo("Europe/Moscow")
 
